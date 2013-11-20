@@ -17,11 +17,26 @@
   -->
 <document>
   <properties>
-    <title>Commons Lang Changes</title>
+    <title>Apache Commons Lang Changes</title>
   </properties>
   <body>
 
   <release version="3.2" date="TBA" description="Next release">
+    <action issue="LANG-932" type="update" dev="britter" due-to="Christoph Schneegans">Misleading Javadoc comment in StrBuilderReader class</action>
+    <action issue="LANG-929" type="fix">OctalUnescaper tried to parse all of \279</action>
+    <action issue="LANG-928" type="fix">OctalUnescaper had bugs when parsing octals starting with a zero</action>
+    <action issue="LANG-905" type="fix">EqualsBuilder returned true when comparing arrays, even when the elements are different</action>
+    <action issue="LANG-774" type="add" due-to="Erhan Bagdemir">Added isStarted, isSuspended and isStopped to StopWatch</action>
+    <action issue="LANG-917" type="fix" due-to="Arne Burmeister">Fixed exception when combining custom and choice format in ExtendedMessageFormat</action>
+    <action issue="LANG-848" type="add" due-to="Alexander Muthmann">Added StringUtils.isBlank/isEmpty CharSequence... methods</action>
+    <action issue="LANG-926" type="add" dev="ggregory">Added ArrayUtils.reverse(array, from, to) methods</action>
+    <action issue="LANG-795" type="add" due-to="Aaron Digulla">StringUtils.toString(byte[], String) deprecated in favour of a new StringUtils.toString(byte[], CharSet)</action>
+    <action issue="LANG-902" type="fix" due-to="Andrzej Winnicki">RandomStringUtils.random javadoc was incorrectly promising letters and numbers would, as opposed to may, appear</action>
+    <action issue="LANG-921" type="fix" dev="britter">BooleanUtils.xor(boolean...) produces wrong results</action>
+    <action issue="LANG-910" type="update" due-to="Timur Yarosh">StringUtils.normalizeSpace now handles non-breaking spaces (Unicode 00A0)</action>
+    <action issue="LANG-804" type="update" dev="britter" due-to="Allon Mureinik">Redundant check for zero in HashCodeBuilder ctor</action>
+    <action issue="LANG-893" type="add" dev="oheger" due-to="Woonsan Ko">StrSubstitutor now supports default values for variables</action>
+    <action issue="LANG-913" type="add" dev="britter" due-to="Allon Mureinik">Adding .gitignore to commons-lang</action>
     <action issue="LANG-837" type="add">Add ObjectUtils.toIdentityString methods that support StringBuilder, StrBuilder, and Appendable</action>
     <action issue="LANG-896" type="fix" due-to="Mark Bryan Yu">BooleanUtils.toBoolean(String str) javadoc is not updated</action>
     <action issue="LANG-879" type="fix">LocaleUtils test fails with new Locale "ja_JP_JP_#u-ca-japanese" of JDK7</action>

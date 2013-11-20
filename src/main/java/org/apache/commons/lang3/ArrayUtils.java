@@ -199,6 +199,8 @@ public class ArrayUtils {
      * @param array1  the left hand array to compare, may be {@code null}
      * @param array2  the right hand array to compare, may be {@code null}
      * @return {@code true} if the arrays are equal
+     * @deprecated this method has been replaced by {@code java.util.Objects.deepEquals(Object, Object)} and will be
+     * removed from future releases.
      */
     public static boolean isEquals(final Object array1, final Object array2) {
         return new EqualsBuilder().append(array1, array2).isEquals();
@@ -469,6 +471,26 @@ public class ArrayUtils {
     public static Object[] nullToEmpty(final Object[] array) {
         if (array == null || array.length == 0) {
             return EMPTY_OBJECT_ARRAY;
+        }
+        return array;
+    }
+
+    /**
+     * <p>Defensive programming technique to change a {@code null}
+     * reference to an empty one.</p>
+     *
+     * <p>This method returns an empty array for a {@code null} input array.</p>
+     *
+     * <p>As a memory optimizing technique an empty array passed in will be overridden with
+     * the empty {@code public static} references in this class.</p>
+     *
+     * @param array  the array to check for {@code null} or empty
+     * @return the same array, {@code public static} empty array if {@code null} or empty input
+     * @since 3.2
+     */
+    public static Class<?>[] nullToEmpty(final Class<?>[] array) {
+        if (array == null || array.length == 0) {
+            return EMPTY_CLASS_ARRAY;
         }
         return array;
     }
@@ -842,6 +864,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      *      the start and end indices.
      * @since 2.1
+     * @see Arrays#copyOfRange(T[], int, int)
      */
     public static <T> T[] subarray(final T[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -885,6 +908,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      *      the start and end indices.
      * @since 2.1
+     * @see Arrays#copyOfRange(long[], int, int)
      */
     public static long[] subarray(final long[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -924,6 +948,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      *      the start and end indices.
      * @since 2.1
+     * @see Arrays#copyOfRange(int[], int, int)
      */
     public static int[] subarray(final int[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -963,6 +988,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      *      the start and end indices.
      * @since 2.1
+     * @see Arrays#copyOfRange(short[], int, int)
      */
     public static short[] subarray(final short[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -1002,6 +1028,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      *      the start and end indices.
      * @since 2.1
+     * @see Arrays#copyOfRange(char[], int, int)
      */
     public static char[] subarray(final char[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -1041,6 +1068,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      *      the start and end indices.
      * @since 2.1
+     * @see Arrays#copyOfRange(byte[], int, int)
      */
     public static byte[] subarray(final byte[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -1080,6 +1108,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      *      the start and end indices.
      * @since 2.1
+     * @see Arrays#copyOfRange(double[], int, int)
      */
     public static double[] subarray(final double[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -1119,6 +1148,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      *      the start and end indices.
      * @since 2.1
+     * @see Arrays#copyOfRange(float[], int, int)
      */
     public static float[] subarray(final float[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -1158,6 +1188,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      *      the start and end indices.
      * @since 2.1
+     * @see Arrays#copyOfRange(boolean[], int, int)
      */
     public static boolean[] subarray(final boolean[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -1404,16 +1435,7 @@ public class ArrayUtils {
         if (array == null) {
             return;
         }
-        int i = 0;
-        int j = array.length - 1;
-        Object tmp;
-        while (j > i) {
-            tmp = array[j];
-            array[j] = array[i];
-            array[i] = tmp;
-            j--;
-            i++;
-        }
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1427,16 +1449,7 @@ public class ArrayUtils {
         if (array == null) {
             return;
         }
-        int i = 0;
-        int j = array.length - 1;
-        long tmp;
-        while (j > i) {
-            tmp = array[j];
-            array[j] = array[i];
-            array[i] = tmp;
-            j--;
-            i++;
-        }
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1450,16 +1463,7 @@ public class ArrayUtils {
         if (array == null) {
             return;
         }
-        int i = 0;
-        int j = array.length - 1;
-        int tmp;
-        while (j > i) {
-            tmp = array[j];
-            array[j] = array[i];
-            array[i] = tmp;
-            j--;
-            i++;
-        }
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1473,16 +1477,7 @@ public class ArrayUtils {
         if (array == null) {
             return;
         }
-        int i = 0;
-        int j = array.length - 1;
-        short tmp;
-        while (j > i) {
-            tmp = array[j];
-            array[j] = array[i];
-            array[i] = tmp;
-            j--;
-            i++;
-        }
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1496,16 +1491,7 @@ public class ArrayUtils {
         if (array == null) {
             return;
         }
-        int i = 0;
-        int j = array.length - 1;
-        char tmp;
-        while (j > i) {
-            tmp = array[j];
-            array[j] = array[i];
-            array[i] = tmp;
-            j--;
-            i++;
-        }
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1519,16 +1505,7 @@ public class ArrayUtils {
         if (array == null) {
             return;
         }
-        int i = 0;
-        int j = array.length - 1;
-        byte tmp;
-        while (j > i) {
-            tmp = array[j];
-            array[j] = array[i];
-            array[i] = tmp;
-            j--;
-            i++;
-        }
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1542,16 +1519,7 @@ public class ArrayUtils {
         if (array == null) {
             return;
         }
-        int i = 0;
-        int j = array.length - 1;
-        double tmp;
-        while (j > i) {
-            tmp = array[j];
-            array[j] = array[i];
-            array[i] = tmp;
-            j--;
-            i++;
-        }
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1565,16 +1533,7 @@ public class ArrayUtils {
         if (array == null) {
             return;
         }
-        int i = 0;
-        int j = array.length - 1;
-        float tmp;
-        while (j > i) {
-            tmp = array[j];
-            array[j] = array[i];
-            array[i] = tmp;
-            j--;
-            i++;
-        }
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1588,9 +1547,306 @@ public class ArrayUtils {
         if (array == null) {
             return;
         }
-        int i = 0;
-        int j = array.length - 1;
+        reverse(array, 0, array.length);
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     * </p>
+     * 
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     * </p>
+     * 
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     */
+    public static void reverse(final boolean[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
         boolean tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     * </p>
+     * 
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     * </p>
+     * 
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     */
+    public static void reverse(final byte[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        byte tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     * </p>
+     * 
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     * </p>
+     * 
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     */
+    public static void reverse(final char[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        char tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     * </p>
+     * 
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     * </p>
+     * 
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     */
+    public static void reverse(final double[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        double tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     * </p>
+     * 
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     * </p>
+     * 
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     */
+    public static void reverse(final float[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        float tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     * </p>
+     * 
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     * </p>
+     * 
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     */
+    public static void reverse(final int[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        int tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     * </p>
+     * 
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     * </p>
+     * 
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     */
+    public static void reverse(final long[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        long tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     * </p>
+     * 
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     * </p>
+     * 
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     */
+    public static void reverse(final Object[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        Object tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     * </p>
+     * 
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     * </p>
+     * 
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     */
+    public static void reverse(final short[] array, int startIndexInclusive, int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        short tmp;
         while (j > i) {
             tmp = array[j];
             array[j] = array[i];

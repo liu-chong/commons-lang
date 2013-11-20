@@ -247,13 +247,13 @@ public class EventListenerSupport<L> implements Serializable {
     private void readObject(final ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
         @SuppressWarnings("unchecked") // Will throw CCE here if not correct
         final
-        L[] listeners = (L[]) objectInputStream.readObject();
+        L[] srcListeners = (L[]) objectInputStream.readObject();
 
-        this.listeners = new CopyOnWriteArrayList<L>(listeners);
+        this.listeners = new CopyOnWriteArrayList<L>(srcListeners);
 
         @SuppressWarnings("unchecked") // Will throw CCE here if not correct
         final
-        Class<L> listenerInterface = (Class<L>) listeners.getClass().getComponentType();
+        Class<L> listenerInterface = (Class<L>) srcListeners.getClass().getComponentType();
 
         initializeTransientFields(listenerInterface, Thread.currentThread().getContextClassLoader());
     }
@@ -299,8 +299,8 @@ public class EventListenerSupport<L> implements Serializable {
          * Propagates the method call to all registered listeners in place of
          * the proxy listener object.
          *
-         * @param proxy the proxy object representing a listener on which the
-         *        invocation was called.
+         * @param unusedProxy the proxy object representing a listener on which the
+         *        invocation was called; not used
          * @param method the listener method that will be called on all of the
          *        listeners.
          * @param args event arguments to propagate to the listeners.
@@ -308,7 +308,7 @@ public class EventListenerSupport<L> implements Serializable {
          * @throws Throwable if an error occurs
          */
         @Override
-        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+        public Object invoke(final Object unusedProxy, final Method method, final Object[] args) throws Throwable {
             for (final L listener : listeners) {
                 method.invoke(listener, args);
             }

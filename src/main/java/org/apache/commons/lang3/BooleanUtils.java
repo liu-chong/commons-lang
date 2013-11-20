@@ -1042,22 +1042,13 @@ public class BooleanUtils {
             throw new IllegalArgumentException("Array is empty");
         }
 
-        // Loops through array, comparing each item
-        int trueCount = 0;
+        // false if the neutral element of the xor operator
+        boolean result = false;
         for (final boolean element : array) {
-            // If item is true, and trueCount is < 1, increments count
-            // Else, xor fails
-            if (element) {
-                if (trueCount < 1) {
-                    trueCount++;
-                } else {
-                    return false;
-                }
-            }
+            result ^= element;
         }
 
-        // Returns true if there was exactly 1 true item
-        return trueCount == 1;
+        return result;
     }
 
     /**

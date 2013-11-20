@@ -30,6 +30,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -43,15 +44,18 @@ import org.junit.Test;
  *
  * @version $Id$
  */
+@SuppressWarnings("deprecation") // deliberate use of deprecated code
 public class StringUtilsTest {
     
     static final String WHITESPACE;
     static final String NON_WHITESPACE;
+    static final String HARD_SPACE;
     static final String TRIMMABLE;
     static final String NON_TRIMMABLE;
     static {
         String ws = "";
         String nws = "";
+        String hs = String.valueOf(((char) 160));
         String tr = "";
         String ntr = "";
         for (int i = 0; i < Character.MAX_VALUE; i++) {
@@ -69,6 +73,7 @@ public class StringUtilsTest {
         }
         WHITESPACE = ws;
         NON_WHITESPACE = nws;
+        HARD_SPACE = hs;
         TRIMMABLE = tr;
         NON_TRIMMABLE = ntr;
     }
@@ -116,6 +121,89 @@ public class StringUtilsTest {
         assertTrue(Modifier.isPublic(cons[0].getModifiers()));
         assertTrue(Modifier.isPublic(StringUtils.class.getModifiers()));
         assertFalse(Modifier.isFinal(StringUtils.class.getModifiers()));
+    }
+    
+    //-----------------------------------------------------------------------
+    @Test
+    public void testisEmpty(){
+      assertTrue(StringUtils.isEmpty(null));
+      assertTrue(StringUtils.isEmpty(""));
+      assertFalse(StringUtils.isEmpty(" "));
+      assertFalse(StringUtils.isEmpty("bob"));
+      assertFalse(StringUtils.isEmpty("  bob  "));
+    }
+    
+    @Test
+    public void testisNotEmpty(){
+      assertFalse(StringUtils.isNotEmpty(null));
+      assertFalse(StringUtils.isNotEmpty(""));
+      assertTrue(StringUtils.isNotEmpty(" "));
+      assertTrue(StringUtils.isNotEmpty("bob"));
+      assertTrue(StringUtils.isNotEmpty("  bob  "));
+    }
+    
+    @Test
+    public void testisAnyEmpty(){
+      assertTrue(StringUtils.isAnyEmpty(null));
+      assertTrue(StringUtils.isAnyEmpty(null, "foo"));
+      assertTrue(StringUtils.isAnyEmpty("", "bar"));
+      assertTrue(StringUtils.isAnyEmpty("bob", ""));
+      assertTrue(StringUtils.isAnyEmpty("  bob  ", null));
+      assertFalse(StringUtils.isAnyEmpty(" ","bar"));
+      assertFalse(StringUtils.isAnyEmpty("foo","bar"));
+    }
+    
+    @Test
+    public void testisNoneEmpty(){
+      assertFalse(StringUtils.isNoneEmpty(null));
+      assertFalse(StringUtils.isNoneEmpty(null, "foo"));
+      assertFalse(StringUtils.isNoneEmpty("", "bar"));
+      assertFalse(StringUtils.isNoneEmpty("bob", ""));
+      assertFalse(StringUtils.isNoneEmpty("  bob  ", null));
+      assertTrue(StringUtils.isNoneEmpty(" ", "bar"));
+      assertTrue(StringUtils.isNoneEmpty("foo", "bar"));
+    }
+    
+    @Test
+    public void testisBlank(){
+      assertTrue(StringUtils.isBlank(null));
+      assertTrue(StringUtils.isBlank(""));
+      assertTrue(StringUtils.isBlank(" "));
+      assertFalse(StringUtils.isBlank("bob"));
+      assertFalse(StringUtils.isBlank("  bob  "));
+    }
+    
+    @Test
+    public void testisNotBlank(){
+      assertFalse(StringUtils.isNotBlank(null));
+      assertFalse(StringUtils.isNotBlank(""));
+      assertFalse(StringUtils.isNotBlank(" "));
+      assertTrue(StringUtils.isNotBlank("bob"));
+      assertTrue(StringUtils.isNotBlank("  bob  "));
+    }
+    
+     @Test
+    public void testisAnyBlank(){
+      assertTrue(StringUtils.isAnyBlank(null));
+      assertTrue(StringUtils.isAnyBlank(null, "foo"));
+      assertTrue(StringUtils.isAnyBlank(null, null));
+      assertTrue(StringUtils.isAnyBlank("", "bar"));
+      assertTrue(StringUtils.isAnyBlank("bob", ""));
+      assertTrue(StringUtils.isAnyBlank("  bob  ", null));
+      assertTrue(StringUtils.isAnyBlank(" ","bar"));
+      assertFalse(StringUtils.isAnyBlank("foo","bar"));
+    }
+    
+    @Test
+    public void testisNoneBlank(){
+      assertFalse(StringUtils.isNoneBlank(null));
+      assertFalse(StringUtils.isNoneBlank(null, "foo"));
+      assertFalse(StringUtils.isNoneBlank(null, null));
+      assertFalse(StringUtils.isNoneBlank("", "bar"));
+      assertFalse(StringUtils.isNoneBlank("bob", ""));
+      assertFalse(StringUtils.isNoneBlank("  bob  ", null));
+      assertFalse(StringUtils.isNoneBlank(" ", "bar"));
+      assertTrue(StringUtils.isNoneBlank("foo", "bar"));
     }
     
     //-----------------------------------------------------------------------
@@ -1300,7 +1388,6 @@ public class StringUtilsTest {
         }
     }
 
-    @SuppressWarnings("deprecation") // intentional test of deprecated method
     @Test
     public void testChomp() {
 
@@ -2119,14 +2206,14 @@ public class StringUtilsTest {
         assertEquals("", StringUtils.getCommonPrefix("xyz", "abcde"));
         assertEquals("i am a ", StringUtils.getCommonPrefix("i am a machine", "i am a robot"));
     }
-        
+
     @Test
     public void testNormalizeSpace() {
         assertEquals(null, StringUtils.normalizeSpace(null));
         assertEquals("", StringUtils.normalizeSpace(""));
         assertEquals("", StringUtils.normalizeSpace(" "));
         assertEquals("", StringUtils.normalizeSpace("\t"));
-        assertEquals("", StringUtils.normalizeSpace("\n"));        
+        assertEquals("", StringUtils.normalizeSpace("\n"));
         assertEquals("", StringUtils.normalizeSpace("\u0009"));
         assertEquals("", StringUtils.normalizeSpace("\u000B"));
         assertEquals("", StringUtils.normalizeSpace("\u000C"));
@@ -2139,6 +2226,7 @@ public class StringUtilsTest {
         assertEquals("a", StringUtils.normalizeSpace("  a  "));
         assertEquals("a b c", StringUtils.normalizeSpace("  a  b   c  "));
         assertEquals("a b c", StringUtils.normalizeSpace("a\t\f\r  b\u000B   c\n"));
+        assertEquals("a   b c", StringUtils.normalizeSpace("a\t\f\r  " + HARD_SPACE + HARD_SPACE + "b\u000B   c\n"));
     }
 
     @Test
@@ -2324,5 +2412,26 @@ public class StringUtilsTest {
         assertEquals("prependIfMissingIgnoreCase(mnoabc,xyz,mno)", "mnoabc", StringUtils.prependIfMissingIgnoreCase("mnoabc","xyz","mno"));
         assertEquals("prependIfMissingIgnoreCase(XYZabc,xyz,mno)", "XYZabc", StringUtils.prependIfMissingIgnoreCase("XYZabc","xyz","mno"));
         assertEquals("prependIfMissingIgnoreCase(MNOabc,xyz,mno)", "MNOabc", StringUtils.prependIfMissingIgnoreCase("MNOabc","xyz","mno"));
+    }
+    
+    /**
+     * Tests {@link StringUtils#toString(byte[], Charset)}
+     * 
+     * @throws UnsupportedEncodingException
+     * @see StringUtils#toString(byte[], Charset)
+     */
+    @Test
+    public void testToEncodedString() throws UnsupportedEncodingException {
+        final String expectedString = "The quick brown fox jumped over the lazy dog.";
+        String encoding = SystemUtils.FILE_ENCODING;
+        byte[] expectedBytes = expectedString.getBytes(encoding);
+        // sanity check start
+        assertArrayEquals(expectedBytes, expectedString.getBytes());
+        // sanity check end
+        assertEquals(expectedString, StringUtils.toEncodedString(expectedBytes, Charset.defaultCharset()));
+        assertEquals(expectedString, StringUtils.toEncodedString(expectedBytes, Charset.forName(encoding)));
+        encoding = "UTF-16";
+        expectedBytes = expectedString.getBytes(encoding);
+        assertEquals(expectedString, StringUtils.toEncodedString(expectedBytes, Charset.forName(encoding)));
     }
 }

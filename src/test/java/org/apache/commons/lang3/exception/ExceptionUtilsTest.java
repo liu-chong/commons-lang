@@ -388,8 +388,8 @@ public class ExceptionUtilsTest {
         }
         
         out = new ByteArrayOutputStream(1024);
-        final Throwable withCause = createExceptionWithCause();
-        ExceptionUtils.printRootCauseStackTrace(withCause, new PrintStream(out));
+        final Throwable cause = createExceptionWithCause();
+        ExceptionUtils.printRootCauseStackTrace(cause, new PrintStream(out));
         String stackTrace = out.toString();
         assertTrue(stackTrace.indexOf(ExceptionUtils.WRAPPED_MARKER) != -1);
         
@@ -414,8 +414,8 @@ public class ExceptionUtilsTest {
         }
         
         writer = new StringWriter(1024);
-        final Throwable withCause = createExceptionWithCause();
-        ExceptionUtils.printRootCauseStackTrace(withCause, new PrintWriter(writer));
+        final Throwable cause = createExceptionWithCause();
+        ExceptionUtils.printRootCauseStackTrace(cause, new PrintWriter(writer));
         String stackTrace = writer.toString();
         assertTrue(stackTrace.indexOf(ExceptionUtils.WRAPPED_MARKER) != -1);
         
@@ -430,8 +430,8 @@ public class ExceptionUtilsTest {
     public void testGetRootCauseStackTrace_Throwable() throws Exception {
         assertEquals(0, ExceptionUtils.getRootCauseStackTrace(null).length);
         
-        final Throwable withCause = createExceptionWithCause();
-        String[] stackTrace = ExceptionUtils.getRootCauseStackTrace(withCause);
+        final Throwable cause = createExceptionWithCause();
+        String[] stackTrace = ExceptionUtils.getRootCauseStackTrace(cause);
         boolean match = false;
         for (final String element : stackTrace) {
             if (element.startsWith(ExceptionUtils.WRAPPED_MARKER)) {
@@ -488,6 +488,8 @@ public class ExceptionUtilsTest {
      * of <code>Throwable</code>.
      */
     private static class ExceptionWithCause extends Exception {
+		private static final long serialVersionUID = 1L;
+
         private Throwable cause;
 
         public ExceptionWithCause(final String str, final Throwable cause) {
@@ -516,7 +518,9 @@ public class ExceptionUtilsTest {
      * return value of <code>Throwable</code>.
      */
     private static class ExceptionWithoutCause extends Exception {
-        @SuppressWarnings("unused")
+		private static final long serialVersionUID = 1L;
+
+       @SuppressWarnings("unused")
         public void getTargetException() {
         }
     }
@@ -524,6 +528,8 @@ public class ExceptionUtilsTest {
     // Temporary classes to allow the nested exception code to be removed 
     // prior to a rewrite of this test class. 
     private static class NestableException extends Exception { 
+		private static final long serialVersionUID = 1L;
+
         @SuppressWarnings("unused")
         public NestableException() { super(); }
         public NestableException(final Throwable t) { super(t); }
